@@ -16,22 +16,23 @@ const io = socketIo(server, {
 });
 
 io.on("connection", (socket) => {
-  // console.log("User from socket.io");
-  // socket.on("user", (data) => {
-  //   console.log("data", data);
-  // });
-
   socket.on("sendMessage", (message) => {
-    // const user = getUser(socket.id);
-    // const filter = new Filter();
-    // if (filter.isProfane(message)) {
-    //   return callback("Profanity is not allowed!");
-    // }
     console.log('message', message)
-    io.emit("message",  message);
-    // callback();
+    io.emit('message', message);
   });
 });
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+
+//   socket.on('disconnect', () => {
+//     console.log('user disconnected');
+//   });
+
+//   socket.on('sendMessage', (msg) => {
+//     console.log('message: ' + msg);
+//     io.emit('chat message', msg);
+//   });
+// });
 
 
 const port = process.env.PORT;

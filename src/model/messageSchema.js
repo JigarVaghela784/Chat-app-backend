@@ -14,12 +14,12 @@ const messageSchema = new mongoose.Schema(
         required: true,
         ref: "User",
       },
-    ownerEmail:{
+    email:{
         type:String,
         require:true,
         ref:"User"
     },
-    ownerName:{
+    name:{
         type:String,
         require:true,
         ref:"User"

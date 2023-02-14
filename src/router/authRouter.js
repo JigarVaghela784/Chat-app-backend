@@ -5,9 +5,10 @@ const User = require("../model/userSchema");
 const router = new express.Router();
 
 router.post("/signup", async (req, res) => {
-  const user = new User(req.body.payload);
   try {
-    
+    const {name,email,password}=req.body.payload
+    const newName= name?.toLowerCase()
+    const user = new User({name:newName,email,password});
     await user.save();
     const token = await user.generateAuthToken();
     res.send({ user, token }).status(201);
@@ -42,9 +43,9 @@ router.get("/user/message", auth, async (req, res) => {
 router.post("/user/message", auth, async (req, res) => {
   const message = new Message({
     ...req.body,
-    ownerName: req.user.name,
+    name: req.user.name,
     owner: req.user._id,
-    ownerEmail: req.user.email,
+    email: req.user.email,
   });
   try {
     await message.save();
