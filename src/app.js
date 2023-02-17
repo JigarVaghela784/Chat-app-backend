@@ -19,6 +19,7 @@ io.on("connection", (socket) => {
     io.emit("delMessage", message);
   })
   socket.on("sendMessage", (message) => {
+    console.log('message', message)
     io.emit("message", message);
   });
 });

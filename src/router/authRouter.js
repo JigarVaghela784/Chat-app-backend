@@ -42,7 +42,7 @@ router.get("/user/message", auth, async (req, res) => {
 
 router.post("/user/message", auth, async (req, res) => {
   const message = new Message({
-    ...req.body,
+    message:req.body.message.message,
     name: req.user.name,
     owner: req.user._id,
     email: req.user.email,
@@ -55,7 +55,6 @@ router.post("/user/message", auth, async (req, res) => {
   }
 });
 router.delete("/user/message/:id", auth, async (req, res) => {
-  console.log('req.params', req.params)
   try {
     const message = await Message.findOneAndDelete({
       _id: req.params.id,
@@ -72,7 +71,6 @@ router.delete("/user/message/:id", auth, async (req, res) => {
 });
 
 router.patch("/forgotPassword", async (req, res) => {
-  console.log("req..body", req.body);
   if (!req.body?.payload?.email) {
     res.status(400).send({ error: "Please enter email" });
   }
