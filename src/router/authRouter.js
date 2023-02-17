@@ -6,9 +6,9 @@ const router = new express.Router();
 
 router.post("/signup", async (req, res) => {
   try {
-    const {name,email,password}=req.body.payload
-    const newName= name?.toLowerCase()
-    const user = new User({name:newName,email,password});
+    const { name, email, password } = req.body.payload;
+    const newName = name?.toLowerCase();
+    const user = new User({ name: newName, email, password });
     await user.save();
     const token = await user.generateAuthToken();
     res.send({ user, token }).status(201);
@@ -54,26 +54,40 @@ router.post("/user/message", auth, async (req, res) => {
     res.status(400);
   }
 });
+router.delete("/user/message/:id", auth, async (req, res) => {
+  console.log('req.params', req.params)
+  try {
+    const message = await Message.findOneAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+    if (!message) {
+      res.sendStatus(404);
+    } else {
+      res.status(200).send(message);
+    }
+  } catch (error) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+});
 
 router.patch("/forgotPassword", async (req, res) => {
   console.log("req..body", req.body);
   if (!req.body?.payload?.email) {
     res.status(400).send({ error: "Please enter email" });
-  // } else {
   }
-    const user = await User.findOne({ email: req.body?.payload?.email });
-    if (!user) {
-      res.status(400).send({ error: "Please enter valid email" });
-    } else {
-      try {
-        user.password = req.body?.payload?.password;
-        await user.save();
-        res.status(200).send(req.user);
-      } catch (error) {
-        res.status(500).send({ error: "Something went wrong" });
-      }
+  const user = await User.findOne({ email: req.body?.payload?.email });
+  if (!user) {
+    res.status(400).send({ error: "Please enter valid email" });
+  } else {
+    try {
+      user.password = req.body?.payload?.password;
+      await user.save();
+      res.status(200).send(req.user);
+    } catch (error) {
+      res.status(500).send({ error: "Something went wrong" });
     }
-  // }
+  }
 });
 
 router.post("/logout", auth, async (req, res) => {
