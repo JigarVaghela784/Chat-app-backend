@@ -7,13 +7,13 @@ const app = express();
 app.use(cors());
 const server = http.createServer(app);
 require("./src/db/mongoose");
-const io = socketIo(server)
-// const io = socketIo(server, {
-//   cors: {
-//     origin: "http://localhost:3000/dashboard",
-//     methods: ["GET", "POST"],
-//   },
-// });
+// const io = socketIo(server)
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:3000/dashboard",
+    methods: ["GET", "POST"],
+  },
+});
 io.on("connection", (socket) => {
 
   socket.on("deleteMessage",(message)=>{
