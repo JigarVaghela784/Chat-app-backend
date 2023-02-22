@@ -2,11 +2,10 @@ const express = require("express");
 const authRouter = require("./src/router/authRouter");
 const cors = require("cors");
 const socketIo = require("socket.io");
-// const http = require("http");
-const https=require('https')
+const http = require("http");
 const app = express();
 app.use(cors());
-const server = https.createServer(app);
+const server = http.createServer(app);
 require("./src/db/mongoose");
 // const io = socketIo(server)
 const io = socketIo(server, {
