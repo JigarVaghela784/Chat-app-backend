@@ -2,10 +2,11 @@ const express = require("express");
 const authRouter = require("./src/router/authRouter");
 const cors = require("cors");
 const socketIo = require("socket.io");
-const http = require("http");
+// const http = require("http");
+const https=require('https')
 const app = express();
 app.use(cors());
-const server = http.createServer(app);
+const server = https.createServer(app);
 require("./src/db/mongoose");
 // const io = socketIo(server)
 const io = socketIo(server, {
@@ -20,6 +21,7 @@ io.on("connection", (socket) => {
     io.emit("delMessage", message);
   })
   socket.on("sendMessage", (message) => {
+    console.log('message', message)
     io.emit("message", message);
   });
 });
