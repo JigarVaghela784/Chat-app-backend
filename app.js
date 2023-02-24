@@ -16,22 +16,22 @@ const io = socketIo(server, {
 });
 io.on("connection", (socket) => {
 
-  socket.on("deleteMessage",(message)=>{
+  socket.on("deleteMessage", (message) => {
     io.emit("delMessage", message);
-  })
+  });
   socket.on("sendMessage", (message) => {
     console.log('message', message)
     io.emit("message", message);
   });
 });
 
-const port = process.env.YOUR_PORT||process.env.PORT;
+const port = process.env.YOUR_PORT || process.env.PORT;
 app.use(express.json());
 app.use(authRouter);
 
-app.get('/',(req,res)=>{
-  res.send("Home")
-})
+app.get("/", (req, res) => {
+  res.send("Home");
+});
 
 server.listen(port, () => {
   console.log(`Server running at port ${port}`);

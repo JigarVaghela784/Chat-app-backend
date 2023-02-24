@@ -6,31 +6,37 @@ const messageSchema = new mongoose.Schema(
   {
     message: {
       type: String,
-      required: true,
       trim: true,
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "User",
-      },
-    email:{
-        type:String,
-        require:true,
-        ref:"User"
+    image: {
+      type: Buffer,
     },
-    name:{
-        type:String,
-        require:true,
-        ref:"User"
-    }
+    imageName: {
+      type: String,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    email: {
+      type: String,
+      require: true,
+      ref: "User",
+    },
+    name: {
+      type: String,
+      require: true,
+      ref: "User",
+    },
+    avatar: {
+      type: Buffer,
+    },
   },
   {
     timestamps: true,
   }
 );
-
-
 
 const Message = mongoose.model("Message", messageSchema);
 
