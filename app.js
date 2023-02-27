@@ -12,7 +12,7 @@ require("./src/db/mongoose");
 
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000/dashboard",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
