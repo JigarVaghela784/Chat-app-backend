@@ -57,15 +57,20 @@ router.patch("/user/me", auth, async (req, res) => {
 });
 
 router.get("/user", auth, async (req, res) => {
-  const user = req.user;
-  res.status(200).send({ user });
+  try {
+    const user = req.user;
+    res.status(200).send({ user });
+    
+  } catch (error) {
+    res.status(500).send({error})
+  }
 });
 
-const imageStorage = multer.memoryStorage({
+const storage = multer.memoryStorage({
   destination: function (req, file, cb) {
-    cb(null, "image");
+    cb(null, "avatars");
   },
-  dest: "image",
+  dest: "avatars",
   limits: {
     fileSize: 1000000,
   },
@@ -77,35 +82,21 @@ const imageStorage = multer.memoryStorage({
   },
 });
 
-const imageUpload = multer({ imageStorage });
-router.post(
-  "/user/message/image",
-  imageUpload.single("image"),
-  auth,
-  async (req, res) => {
-    console.log("typeof req.file", typeof req.file);
-
-    console.log("req.file.filename", req.file);
-    const image = await sharp(req.file.buffer)
+const upload = multer({ storage });
+router.post("/user/avatar", upload.single("avatar"), auth, async (req, res) => {
+  try {
+    const buffer = await sharp(req.file.buffer)
       .resize({ width: 250, height: 250 })
       .png()
       .toBuffer();
-    const message = new Message({
-      image: image,
-      imageName: req.file.originalname,
-      name: req.user.name,
-      owner: req.user._id,
-      email: req.user.email,
-      avatar: req.user.avatar,
-    });
-    try {
-      await message.save();
-      res.status(201).send(message);
-    } catch (error) {
-      res.status(400);
-    }
+    req.user.avatar = buffer;
+    await req.user.save();
+    res.send({ msg: "Profile Image Uploaded" });
+  } catch (error) {
+    console.log("error", error);
+    res.send({ error });
   }
-);
+});
 
 router.patch("/forgotPassword", async (req, res) => {
   if (!req.body?.payload?.email) {
