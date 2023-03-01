@@ -22,8 +22,16 @@ router.post("/user/message", auth, async (req, res) => {
   }
 });
 router.get("/user/message", auth, async (req, res) => {
-  const message = await Message.find();
-  res.status(200).send({ message });
+  try {
+    const message = await Message.find();
+    if (!message) {
+      throw new Error()
+    }
+      console.log("message", message);
+      res.status(200).send(message);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 router.delete("/user/message/:id", auth, async (req, res) => {
