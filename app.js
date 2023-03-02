@@ -10,12 +10,13 @@ const server = http.createServer(app);
 
 require("./src/db/mongoose");
 
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
-});
+const io = socketIo(server)
+// , {
+//   cors: {
+//     origin: "http://localhost:3000",
+//     methods: ["GET", "POST"],
+//   },
+// });
 io.on("connection", (socket) => {
 
   socket.on("deleteMessage", (message) => {
