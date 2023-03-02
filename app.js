@@ -2,21 +2,18 @@ const express = require("express");
 const authRouter = require("./src/router/authRouter");
 const userRouter = require("./src/router/userRouter");
 const cors = require("cors");
-const socketIo = require("socket.io");
+const {Server} = require("socket.io");
 const http = require("http");
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
-
 require("./src/db/mongoose");
 
-const io = socketIo(server)
-// , {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST"],
-//   },
-// });
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
 io.on("connection", (socket) => {
 
   socket.on("deleteMessage", (message) => {
