@@ -13,6 +13,7 @@ router.post("/user/message", auth, async (req, res) => {
     owner: req.user._id,
     email: req.user.email,
     avatar: req.user.avatar,
+    messageId: req.body.message.messageId,
   });
   try {
     await message.save();
@@ -32,6 +33,20 @@ router.get("/user/message", auth, async (req, res) => {
     res.send(error);
   }
 });
+// router.get("/user/message/:id", auth, async (req, res) => {
+//   const messageId=req.params.id.split("&");
+//   console.log('messageId', messageId)
+//   try {
+//     const message = await Message.find();
+//     console.log('message', message[0].messageId===messageId)
+//     if (!message) {
+//       throw new Error();
+//     }
+//     res.status(200).send(message[0].messageId);
+//   } catch (error) {
+//     res.send(error);
+//   }
+// });
 
 router.delete("/user/message/:id", auth, async (req, res) => {
   try {
@@ -144,6 +159,15 @@ router.get("/user/avatar", auth, async (req, res) => {
     res.json(user.avatar);
   } catch (error) {
     res.status(404).send();
+  }
+});
+
+router.get("/user/finduser", auth, async (req, res) => {
+  try {
+    const user = await User.find();
+    res.send(user);
+  } catch (error) {
+    res.send(error);
   }
 });
 

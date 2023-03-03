@@ -24,6 +24,9 @@ const messageSchema = new mongoose.Schema(
       require: true,
       ref: "User",
     },
+    messageId:{
+      type:Array,
+    },
     name: {
       type: String,
       require: true,
