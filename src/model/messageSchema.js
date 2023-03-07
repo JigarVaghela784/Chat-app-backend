@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-// const validator = require("validator");
-// const bcript = require("bcryptjs");
-// const jwt = require("jsonwebtoken");
+
 const messageSchema = new mongoose.Schema(
   {
     message: {
@@ -25,7 +23,7 @@ const messageSchema = new mongoose.Schema(
       ref: "User",
     },
     messageId:{
-      type:Array,
+      type:String,
     },
     name: {
       type: String,

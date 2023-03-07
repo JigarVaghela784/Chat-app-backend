@@ -33,20 +33,19 @@ router.get("/user/message", auth, async (req, res) => {
     res.send(error);
   }
 });
-// router.get("/user/message/:id", auth, async (req, res) => {
-//   const messageId=req.params.id.split("&");
-//   console.log('messageId', messageId)
-//   try {
-//     const message = await Message.find();
-//     console.log('message', message[0].messageId===messageId)
-//     if (!message) {
-//       throw new Error();
-//     }
-//     res.status(200).send(message[0].messageId);
-//   } catch (error) {
-//     res.send(error);
-//   }
-// });
+router.get("/user/message/:id", auth, async (req, res) => {
+  const messageId = req.params.id;
+  console.log("messageId", messageId);
+  try {
+    const message = await Message.find({ messageId });
+    if (!message) {
+      throw new Error();
+    }
+    res.send(message);
+  } catch (error) {
+    res.send("error");
+  }
+});
 
 router.delete("/user/message/:id", auth, async (req, res) => {
   try {

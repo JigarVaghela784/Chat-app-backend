@@ -59,10 +59,17 @@ router.patch("/user/me", auth, async (req, res) => {
 router.get("/user", auth, async (req, res) => {
   try {
     const user = req.user;
-    res.status(200).send({ user });
-    
+    res.status(200).send(user);
   } catch (error) {
-    res.status(500).send({error})
+    res.status(500).send({ error });
+  }
+});
+router.get("/finduser/:id", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send({ error });
   }
 });
 
