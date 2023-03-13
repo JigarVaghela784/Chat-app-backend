@@ -5,7 +5,7 @@ const chatRouter = require("./src/router/chatRouter");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const http = require("http");
-const { addUser, getUser } = require("./src/utils/user");
+const { addUser, getUser, removeUser, getUserInRoom } = require("./src/utils/user");
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
@@ -21,13 +21,14 @@ io.on("connection", (socket) => {
   socket.on("join", (options, callback) => {
     console.log("option", options);
     const { user, error } = addUser({ id: socket.id, ...options });
+    console.log('user.room', user?.room)
     socket.join(user?.room);
     // if (!options) {
     //   return callback(!options);
     // }
     console.log("user", user);
     socket.emit("notification", "Welcome!");
-    socket.broadcast.emit("notification", `${options.name} has join!`);
+    socket.broadcast.emit("notification", `${user?.name} has join!`);
   });
   socket.on("deleteMessage", (message) => {
     const user = getUser(socket.id);
@@ -35,9 +36,17 @@ io.on("connection", (socket) => {
   });
   socket.on("sendMessage", (message) => {
     const user = getUser(socket.id);
+
     io.to(user?.room).emit("message", message);
   });
   socket.on("disconnect", () => {
+    const user = removeUser(socket.id);
+    if (user) {
+      io.to(user?.room).emit("roomData", {
+        room: user?.room,
+        users: getUserInRoom(user?.room),
+      });
+    }
     console.log(`Socket ${socket.id} disconnected.`);
   });
 });

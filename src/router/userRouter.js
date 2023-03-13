@@ -81,16 +81,12 @@ const storage = multer.memoryStorage({
 
 const upload = multer({ storage });
 router.post(
-  "/user/message/image",
+  "/user/message/image/:id",
   upload.single("image"),
   auth,
   async (req, res) => {
-    console.log("typeof req.file", typeof req.file);
-
-    // console.log("req.file.filename", req.file);
     const image = await sharp(req.file.buffer)
-      .resize({ width: 250, height: 250 })
-      .png()
+      .png({quality:100})
       .toBuffer();
     const message = new Message({
       image: image,
@@ -99,6 +95,7 @@ router.post(
       owner: req.user._id,
       email: req.user.email,
       avatar: req.user.avatar,
+      messageId: req.params.id,
     });
     try {
       await message.save();

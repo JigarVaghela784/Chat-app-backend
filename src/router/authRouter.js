@@ -1,10 +1,16 @@
 const express = require("express");
+const Joi = require("joi");
 const multer = require("multer");
 const sharp = require("sharp");
 const auth = require("../middleware/auth");
 const Message = require("../model/messageSchema");
 const User = require("../model/userSchema");
 const router = new express.Router();
+
+const signupSchema=Joi.object({
+  email:Joi.string().email().required(),
+  
+})
 
 router.post("/signup", async (req, res) => {
   try {
